@@ -5,8 +5,8 @@ const MenuItems = {
       name: "Dashboard",
     },
     {
-      path: "/sample",
-      name: "Sample",
+      path: "/posts",
+      name: "Posts",
     },
   ],
 };

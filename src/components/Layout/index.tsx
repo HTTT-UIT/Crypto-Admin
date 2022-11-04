@@ -15,7 +15,7 @@ const MainLayout = () => {
       location={{
         pathname,
       }}
-      title="Hifi business"
+      title="Crypto"
       logo={logoImage}
       fixedHeader
       fixSiderbar
