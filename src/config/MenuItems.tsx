@@ -8,6 +8,14 @@ const MenuItems = {
       path: "/posts",
       name: "Posts",
     },
+    {
+      path: "/tags",
+      name: "Tags",
+    },
+    {
+      path: "/users",
+      name: "Users",
+    },
   ],
 };
 

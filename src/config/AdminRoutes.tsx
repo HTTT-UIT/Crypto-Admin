@@ -1,8 +1,10 @@
 import AboutPage from "@/pages/AboutPage";
 import Dashboard from "@/pages/Dashboard";
 import Posts from "@/pages/Posts";
+import PostView from "@/pages/Posts/PostView";
 import PublishPost from "@/pages/PublishPost";
-import Sample from "@/pages/Sample";
+import Tags from "@/pages/Tags";
+import Users from "@/pages/Users";
 
 interface IRoute {
   path: string;
@@ -19,8 +21,8 @@ const AdminRoutes: IRoute[] = [
     page: <AboutPage />,
   },
   {
-    path: "/sample",
-    page: <Sample />,
+    path: "/tags",
+    page: <Tags />,
   },
   {
     path: "/posts",
@@ -29,6 +31,14 @@ const AdminRoutes: IRoute[] = [
   {
     path: "/posts/publish",
     page: <PublishPost />,
+  },
+  {
+    path: "/posts/view/:id",
+    page: <PostView />,
+  },
+  {
+    path: "/users",
+    page: <Users />,
   },
 ];
 

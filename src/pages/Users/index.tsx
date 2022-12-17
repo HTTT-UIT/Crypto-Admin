@@ -15,7 +15,7 @@ type PostTable = {
   status: string;
 };
 
-const Posts = () => {
+const Users = () => {
   const navigate = useNavigate();
 
   const columns: ColumnsType<PostTable> = [
@@ -77,7 +77,7 @@ const Posts = () => {
         return (
           <div>
             <Tooltip title="View details">
-              <Link to={`/posts/view/${_id}`}>
+              <Link to={`/posts/publish/${_id}`}>
                 <Button icon={<EyeOutlined />} className={styles.action} />
               </Link>
             </Tooltip>
@@ -123,7 +123,7 @@ const Posts = () => {
   ];
   return (
     <div>
-      <h1 className="text-blue-600 text-2xl">Post list</h1>
+      <h1 className="text-blue-600 text-2xl">Users</h1>
       <Card>
         <Row gutter={[20, 20]}>
           <Col span={20}>
@@ -147,4 +147,4 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default Users;
