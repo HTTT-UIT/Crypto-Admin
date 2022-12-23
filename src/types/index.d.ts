@@ -38,3 +38,20 @@ type CommentData = {
   createdAt: string;
   createdBy: string;
 };
+
+type ReportData = {
+  id: string;
+  reason: string;
+  content: string;
+  status: string;
+  blogReport: {
+    id: 20;
+    header: string;
+  };
+  userReport: {
+    id: string;
+    name: string;
+  };
+  createdAt: Date;
+  createdBy: string;
+};

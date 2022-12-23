@@ -34,25 +34,31 @@ const blogApi = {
         tagIds: tagIDs,
         status: 0,
       },
-      {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      },
+      { headers: { "content-type": "multipart/form-data" } },
     );
   },
   delete: (id: string) => {
     return axiosClient.delete(`/Blogs/${id}`);
   },
-  update: async ({ id, header, content, authorID, tagIDs }) => {
+  update: async ({ id, header, content, authorID, tagIDs, status }) => {
     return await axiosClient.put(
-      `/Blogs`,
-      { id, header, content, authorID, tagIDs },
-      {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      },
+      `/Blogs/${id}`,
+      { id, header, content, authorID, tagIDs, status },
+      { headers: { "content-type": "multipart/form-data" } },
+    );
+  },
+  updateStatus: async (id: string, status: number) => {
+    return await axiosClient.put(
+      `/Blogs/${id}`,
+      { status: status },
+      { headers: { "content-type": "multipart/form-data" } },
+    );
+  },
+  updateImage: async (id: string, url: any) => {
+    return await axiosClient.put(
+      `/Blogs/${id}`,
+      { imageUrl: url },
+      { headers: { "content-type": "multipart/form-data" } },
     );
   },
 };

@@ -1,4 +1,4 @@
-import { HiUserGroup, HiOutlineNewspaper, HiHome } from "react-icons/hi";
+import { HiUserGroup, HiOutlineNewspaper, HiExclamation } from "react-icons/hi";
 
 const AdminMenuItems = {
   routes: [
@@ -26,6 +26,15 @@ const AdminMenuItems = {
       icon: (
         <span role="img" className="anticon">
           <HiUserGroup size={20} />
+        </span>
+      ),
+    },
+    {
+      path: "/reports",
+      name: "Báo cáo",
+      icon: (
+        <span role="img" className="anticon">
+          <HiExclamation size={20} />
         </span>
       ),
     },

@@ -10,7 +10,6 @@ import moment from "moment";
 const { Search } = Input;
 
 const Users = () => {
-  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>();
   const [source, setSource] = useState<User[]>();
 
@@ -50,7 +49,7 @@ const Users = () => {
                 title="Bạn có chắc muốn xóa người dùng này?"
                 okText="Yes"
                 cancelText="No">
-                <Button danger icon={<DeleteOutlined />} className={styles.action} />
+                <Button danger icon={<DeleteOutlined />} />
               </Popconfirm>
             </Tooltip>
           </div>
@@ -90,11 +89,17 @@ const Users = () => {
 
   return (
     <div>
-      <h1 className="text-blue-600 text-2xl">Users</h1>
+      <h1 className="text-blue-600 text-2xl">Danh sách người dùng</h1>
       <Card>
         <Row gutter={[20, 20]}>
           <Col span={8}>
-            <Search onSearch={onSearch} size="large" style={{ width: "100%" }} placeholder="Search" enterButton />
+            <Search
+              onSearch={onSearch}
+              size="large"
+              style={{ width: "100%" }}
+              placeholder="Tìm kiếm theo tên"
+              enterButton
+            />
           </Col>
           <Col span={4}></Col>
           <Col span={24}>

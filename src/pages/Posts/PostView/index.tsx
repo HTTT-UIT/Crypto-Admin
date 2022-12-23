@@ -29,7 +29,7 @@ const PostView: FC = () => {
           <h3 className="text-2xl font-bold">{blog?.header}</h3>
           <Space size="middle" direction="vertical">
             <div className="flex items-center gap-2">
-              <Avatar src={blog?.authorImageUrl} />
+              {/* <Avatar src={blog?.authorImageUrl} /> */}
               <p className="m-0 p-0">{`${blog?.authorName} - ${moment(blog?.createdAt).format("HH:mm DD/MM/YYYY")}`}</p>
             </div>
             {blog?.tags.map((item) => (

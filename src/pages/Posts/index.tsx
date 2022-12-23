@@ -1,8 +1,7 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Card, Input, Popconfirm, Tag, Tooltip, Table, Row, Col, message } from "antd";
+import { CheckCircleOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Popconfirm, Tag, Tooltip, Table, Row, Col, message, Space } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./index.module.less";
 import { useEffect, useState } from "react";
 import blogApi from "@/api/blogApi";
 import moment from "moment";
@@ -66,9 +65,11 @@ const Posts = () => {
       align: "center",
       width: "10%",
       render: (status) => (
-        <Tag color={statusColor[status]} key={status}>
-          {blogStatus[status]}
-        </Tag>
+        <Space>
+          <Tag color={statusColor[status]} key={status}>
+            {blogStatus[status]}
+          </Tag>
+        </Space>
       ),
     },
     {
@@ -76,22 +77,38 @@ const Posts = () => {
       dataIndex: "id",
       align: "center",
       render: (id: any) => {
-        return (
-          <div>
-            <Tooltip title="View details">
+        return user?.userName == "admin" ? (
+          <Space>
+            <Tooltip title="Xem bài viết">
               <Link to={`/posts/view/${id}`}>
-                <Button icon={<EyeOutlined />} className={styles.action} />
+                <Button icon={<EyeOutlined />} />
               </Link>
             </Tooltip>
-            <Tooltip title="Edit">
-              <Button onClick={() => navigate(`/posts/edit/${id}`)} icon={<EditOutlined />} className={styles.action} />
+            <Tooltip title="Duyệt bài viết">
+              <Button type="primary" onClick={() => onAprrove(id)} icon={<CheckCircleOutlined />} />
             </Tooltip>
-            <Tooltip title="Delete">
+            <Tooltip title="Xóa bài viết">
               <Popconfirm onConfirm={confirmDelete} title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Hủy">
-                <Button onClick={() => onDelete(id)} danger icon={<DeleteOutlined />} className={styles.action} />
+                <Button onClick={() => onDelete(id)} danger icon={<DeleteOutlined />} />
               </Popconfirm>
             </Tooltip>
-          </div>
+          </Space>
+        ) : (
+          <Space>
+            <Tooltip title="Xem bài viết">
+              <Link to={`/posts/view/${id}`}>
+                <Button type="primary" icon={<EyeOutlined />} />
+              </Link>
+            </Tooltip>
+            <Tooltip title="Sửa bài viết">
+              <Button onClick={() => navigate(`/posts/edit/${id}`)} icon={<EditOutlined />} />
+            </Tooltip>
+            <Tooltip title="Xóa bài viết">
+              <Popconfirm onConfirm={confirmDelete} title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Hủy">
+                <Button onClick={() => onDelete(id)} danger icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </Space>
         );
       },
     },
@@ -135,7 +152,6 @@ const Posts = () => {
 
   const confirmDelete = (e: React.MouseEvent<HTMLElement>) => {
     if (idBlog) {
-      console.log(idBlog);
       blogApi
         .delete(idBlog)
         .then(() => fetchAPI())
@@ -149,6 +165,19 @@ const Posts = () => {
   const onSearch = (value: string) => {
     const tmp = data.filter((blog) => blog.header.toLowerCase().includes(value.toLowerCase()));
     setDatasource(tmp);
+  };
+
+  const onAprrove = (id: string) => {
+    blogApi
+      .updateStatus(id, 1)
+      .then((res) => {
+        message.success("Duyệt bài thành công!");
+        fetchAPI();
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Đã xảy ra lỗi!");
+      });
   };
 
   return (
@@ -182,11 +211,15 @@ const Posts = () => {
             </div>
           </Col>
           <Col span={4}>
-            <Link to="/posts/publish">
-              <Button size="large" block type="primary" icon={<EditOutlined />}>
-                Viết bài
-              </Button>
-            </Link>
+            {user?.userName == "admin" ? (
+              <p></p>
+            ) : (
+              <Link to="/posts/publish">
+                <Button size="large" block type="primary" icon={<EditOutlined />}>
+                  Viết bài
+                </Button>
+              </Link>
+            )}
           </Col>
           <Col span={24}>
             <Table

@@ -10,13 +10,16 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     logout: () => {
-      localStorage.removeItem("token");
+      localStorage.clear();
       return initialState;
     },
   },
   extraReducers: (builder) => {
     [getUser].forEach((thunk) =>
       builder.addCase(thunk.fulfilled, (state, { payload }: PayloadAction<any>) => {
+        if (state.userName == "admin") {
+          localStorage.setItem("role", "admin");
+        }
         return { ...state, ...payload };
       }),
     );
