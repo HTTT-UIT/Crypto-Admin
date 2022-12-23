@@ -69,7 +69,6 @@ const EditPost: any = () => {
 
   const submit = async () => {
     try {
-      console.log(form.getFieldsValue());
       const { content, title, tag } = form.getFieldsValue();
       const res = await blogApi.update({
         id: id,

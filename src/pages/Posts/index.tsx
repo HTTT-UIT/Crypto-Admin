@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, DeleteOutlined, EditOutlined, EyeOutlined, StopOutlined } from "@ant-design/icons";
 import { Button, Card, Input, Popconfirm, Tag, Tooltip, Table, Row, Col, message, Space } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ const Posts = () => {
   const [data, setData] = useState<Blog[]>([]);
   const [datasource, setDatasource] = useState<Blog[]>([]);
   const [idBlog, setIdBlog] = useState();
-  const [stat, setStat] = useState([0, 0, 0]);
+  const [stat, setStat] = useState([0, 0, 0, 0]);
   const user = useAppSelector(selectUser);
 
   const columns: ColumnsType<Blog> = [
@@ -85,7 +85,10 @@ const Posts = () => {
               </Link>
             </Tooltip>
             <Tooltip title="Duyệt bài viết">
-              <Button type="primary" onClick={() => onAprrove(id)} icon={<CheckCircleOutlined />} />
+              <Button type="primary" onClick={() => onAprrove(id, 1)} icon={<CheckCircleOutlined />} />
+            </Tooltip>
+            <Tooltip title="Từ chối bài viết">
+              <Button type="primary" danger onClick={() => onAprrove(id, 2)} icon={<StopOutlined />} />
             </Tooltip>
             <Tooltip title="Xóa bài viết">
               <Popconfirm onConfirm={confirmDelete} title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Hủy">
@@ -167,11 +170,11 @@ const Posts = () => {
     setDatasource(tmp);
   };
 
-  const onAprrove = (id: string) => {
+  const onAprrove = (id: string, status: number) => {
     blogApi
-      .updateStatus(id, 1)
+      .updateStatus(id, status)
       .then((res) => {
-        message.success("Duyệt bài thành công!");
+        message.success("Thao tác thành công!");
         fetchAPI();
       })
       .catch((err) => {
@@ -183,22 +186,28 @@ const Posts = () => {
   return (
     <div>
       <Row gutter={[20, 20]}>
-        <Col span={8}>
+        <Col span={6}>
           <Card bordered>
             <h4 className="text-2xl font-semibold">Số bài viết mới</h4>
-            <p className="text-blue-600 text-xl font-bold">{stat[0]}</p>
+            <p className="text-blue-600 text-2xl font-bold m-0">{stat[0] || 0}</p>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col span={6}>
           <Card bordered>
             <h4 className="text-2xl font-semibold">Số bài viết đã duyệt</h4>
-            <p className="text-blue-600 text-xl font-bold">{stat[1]}</p>
+            <p className="text-blue-600 text-2xl font-bold m-0">{stat[1] || 0}</p>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col span={6}>
           <Card bordered>
             <h4 className="text-2xl font-semibold">Số bài viết từ chối</h4>
-            <p className="text-blue-600 text-xl font-bold">{stat[2]}</p>
+            <p className="text-blue-600 text-2xl font-bold m-0">{stat[2] || 0}</p>
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card bordered>
+            <h4 className="text-2xl font-semibold">Số bài viết cảnh báo</h4>
+            <p className="text-blue-600 text-2xl font-bold m-0">{stat[3] || 0}</p>
           </Card>
         </Col>
       </Row>
