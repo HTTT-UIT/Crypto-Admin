@@ -36,8 +36,8 @@ export default defineConfig({
       less: {
         javascriptEnabled: true,
         modifyVars: {
-          "primary-color": "#683bc9",
-          "border-radius-base": "4px",
+          "primary-color": "#16884a",
+          "border-radius-base": "6px",
         },
       },
     },

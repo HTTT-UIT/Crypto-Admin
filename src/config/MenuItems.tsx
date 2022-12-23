@@ -1,20 +1,15 @@
+import { HiOutlineNewspaper } from "react-icons/hi";
+
 const MenuItems = {
   routes: [
     {
-      path: "/",
-      name: "Dashboard",
-    },
-    {
       path: "/posts",
-      name: "Posts",
-    },
-    {
-      path: "/tags",
-      name: "Tags",
-    },
-    {
-      path: "/users",
-      name: "Users",
+      name: "Bài viết",
+      icon: (
+        <span role="img" className="anticon">
+          <HiOutlineNewspaper size={20} />
+        </span>
+      ),
     },
   ],
 };

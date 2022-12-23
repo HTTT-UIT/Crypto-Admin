@@ -1,5 +1,6 @@
+import AdminMenuItems from "./AdminMenuItems";
 import AdminRoutes from "./AdminRoutes";
 import AppVariables from "./AppVariables";
 import MenuItems from "./MenuItems";
 
-export { MenuItems, AdminRoutes, AppVariables };
+export { MenuItems, AdminRoutes, AppVariables, AdminMenuItems };

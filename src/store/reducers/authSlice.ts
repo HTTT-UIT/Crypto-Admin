@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getUser } from "../actions/userAction";
+import { login } from "../actions/authAction";
 
-export type UserState = Partial<User>;
+export type AuthState = Partial<{
+  token: string;
+  refreshToken: string;
+}>;
 
-export const initialState: UserState = {};
+export const initialState: AuthState = {
+  token: undefined,
+  refreshToken: undefined,
+};
 
-export const userSlice = createSlice({
-  name: "user",
+export const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     logout: () => {
@@ -15,12 +21,12 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    [getUser].forEach((thunk) =>
+    [login].forEach((thunk) =>
       builder.addCase(thunk.fulfilled, (state, { payload }: PayloadAction<any>) => {
         return { ...state, ...payload };
       }),
     );
-    [getUser].forEach((thunk) =>
+    [login].forEach((thunk) =>
       builder.addCase(thunk.rejected, () => {
         return initialState;
       }),
@@ -28,7 +34,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const userAction = {
-  ...userSlice.actions,
-  getUser,
+export const authAction = {
+  ...authSlice.actions,
+  login,
 };

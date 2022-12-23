@@ -3,6 +3,7 @@ import Dashboard from "@/pages/Dashboard";
 import Posts from "@/pages/Posts";
 import PostView from "@/pages/Posts/PostView";
 import PublishPost from "@/pages/PublishPost";
+import EditPost from "@/pages/PublishPost/EditPost";
 import Tags from "@/pages/Tags";
 import Users from "@/pages/Users";
 
@@ -12,18 +13,10 @@ interface IRoute {
 }
 
 const AdminRoutes: IRoute[] = [
-  {
-    path: "/",
-    page: <Dashboard />,
-  },
-  {
-    path: "/about",
-    page: <AboutPage />,
-  },
-  {
-    path: "/tags",
-    page: <Tags />,
-  },
+  //   {
+  //     path: "/tags",
+  //     page: <Tags />,
+  //   },
   {
     path: "/posts",
     page: <Posts />,
@@ -35,6 +28,10 @@ const AdminRoutes: IRoute[] = [
   {
     path: "/posts/view/:id",
     page: <PostView />,
+  },
+  {
+    path: "/posts/edit/:id",
+    page: <EditPost />,
   },
   {
     path: "/users",

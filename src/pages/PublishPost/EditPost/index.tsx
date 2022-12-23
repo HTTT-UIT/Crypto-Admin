@@ -7,14 +7,17 @@ import { selectUser } from "@/store/selectors";
 import { PlusOutlined } from "@ant-design/icons";
 import { Breadcrumb, Button, Card, Col, Divider, Form, Input, InputRef, Row, Select, Space, message } from "antd";
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-const PublishPost: any = () => {
+const EditPost: any = () => {
   const [form] = Form.useForm();
+  const { id } = useParams();
 
-  const [items, setItems] = useState<TagBlog[]>([]);
+  const [blog, setBlog] = useState<Blog>();
+  const [tagList, setTagList] = useState<TagBlog[]>([]);
   const [content, setContent] = useState("");
   const [tagName, setTagName] = useState("");
+  const [defaultTag, setDefaultTag] = useState<TagBlog[]>([]);
   const inputRef = useRef<InputRef>(null);
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
@@ -29,7 +32,7 @@ const PublishPost: any = () => {
     }
     e.preventDefault();
     const newTag = await tagApi.create(tagName);
-    setItems([...items, newTag?.value]);
+    setTagList([...tagList, newTag?.value]);
     setTagName("");
     setTimeout(() => {
       inputRef.current?.focus();
@@ -37,9 +40,27 @@ const PublishPost: any = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        const res = await blogApi.getOne(id);
+        setBlog(res);
+
+        var defaultTag = [];
+        if (res?.tags?.length > 0) {
+          res.tags.forEach((tag) => {
+            defaultTag.push(tag?.id);
+          });
+        }
+        form.setFieldsValue({ title: res?.header, content: res?.content, tag: defaultTag });
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  useEffect(() => {
     const fetch = async () => {
       const res = await tagApi.getList();
-      setItems(res?.items);
+      setTagList(res?.items);
     };
 
     fetch();
@@ -47,8 +68,9 @@ const PublishPost: any = () => {
 
   const submit = async () => {
     try {
+      console.log(form.getFieldsValue());
       const { content, title, tag } = form.getFieldsValue();
-      const res = await blogApi.create({ title: title, content: content, tagIDs: tag, authorID: user?.id });
+      const res = await blogApi.update({ id: id, header: title, content: content, tagIDs: tag, authorID: user?.id });
       console.log(res);
       navigate("/posts");
     } catch (error) {
@@ -94,7 +116,7 @@ const PublishPost: any = () => {
                       </Space>
                     </>
                   )}
-                  options={items.map((item) => ({ label: item.title, value: item.id }))}
+                  options={tagList.map((item) => ({ label: item.title, value: item.id }))}
                 />
               </Form.Item>
             </Col>
@@ -117,4 +139,4 @@ const PublishPost: any = () => {
   );
 };
 
-export default PublishPost;
+export default EditPost;

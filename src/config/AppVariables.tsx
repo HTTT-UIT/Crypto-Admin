@@ -1,5 +1,5 @@
 const AppVariables = {
-  apiUrl: "http://localhost:5000/api",
+  apiUrl: "http://26.2.80.248:9091/api",
 };
 
 export default AppVariables;

@@ -10,14 +10,14 @@ interface IProps {
 const RichInput: React.FC<IProps> = ({ value, onChange }) => {
   return (
     <div style={{ minHeight: "400px" }}>
-      <Label text="Blog content" requiredMark />
+      <Label text="Nội dung" requiredMark />
       <ReactQuill
         theme="snow"
         onChange={onChange}
         value={value}
         modules={modules}
         formats={formats}
-        placeholder={"Write blog content"}
+        placeholder={"Nhập nội dung"}
         className="bg-white"
         style={{ height: "320px" }}
       />

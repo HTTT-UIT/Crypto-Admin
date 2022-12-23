@@ -1,91 +1,55 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Card, Input, Popconfirm, Tag, Tooltip, Table, Row, Col } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Popconfirm, Tooltip, Table, Row, Col, Image, message } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.less";
+import { useEffect, useState } from "react";
+import { userApi } from "@/api";
+import moment from "moment";
 
 const { Search } = Input;
 
-type PostTable = {
-  _id: string;
-  title: string;
-  tag: string;
-  createdAt: string;
-  updatedAt: string;
-  status: string;
-};
-
 const Users = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>();
+  const [source, setSource] = useState<User[]>();
 
-  const columns: ColumnsType<PostTable> = [
+  const columns: ColumnsType<User> = [
     {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-      width: "30%",
+      title: "Ảnh đại diện",
+      dataIndex: "profileImageUrl",
+      key: "profileImageUrl",
+      align: "center",
+      render: (url) => (
+        <Image width={80} src={url ? url : `https://ui-avatars.com/api/?name=avatar&length=1&background=random`} />
+      ),
+    },
+    {
+      title: "Tên người dùng",
+      dataIndex: "userName",
+      key: "userName",
       align: "center",
     },
     {
-      title: "Tag",
-      dataIndex: "tag",
-      key: "tag",
-      width: "15%",
+      title: "Ngày sinh",
+      dataIndex: "dob",
+      key: "dob",
       align: "center",
-      render: (tag) => {
-        return (
-          <Tag color="geekblue" key={tag}>
-            {tag}
-          </Tag>
-        );
-      },
+      render: (dob) => moment(dob).format("DD/MM/YYYY"),
     },
     {
-      title: "Created at",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      key: "id",
+      dataIndex: "id",
       align: "center",
-      width: "15%",
-    },
-    {
-      title: "Updated at",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      align: "center",
-      width: "10%",
-      render: (status) => {
-        const color = status == "Pending" ? "orange" : status == "Approved" ? "green" : "cyan";
-        return (
-          <Tag color={color} key={status}>
-            {status}
-          </Tag>
-        );
-      },
-    },
-    {
-      key: "_id",
-      dataIndex: "_id",
-      align: "center",
-      render: (_id: any) => {
+      render: (id: any) => {
         return (
           <div>
-            <Tooltip title="View details">
-              <Link to={`/posts/publish/${_id}`}>
-                <Button icon={<EyeOutlined />} className={styles.action} />
-              </Link>
-            </Tooltip>
-            <Tooltip title="Edit">
-              <Button onClick={() => navigate(_id + "/update")} icon={<EditOutlined />} className={styles.action} />
-            </Tooltip>
             <Tooltip title="Delete">
-              <Popconfirm title="Are you sure delete this task?" okText="Yes" cancelText="No">
+              <Popconfirm
+                onConfirm={() => onDelete(id)}
+                title="Bạn có chắc muốn xóa người dùng này?"
+                okText="Yes"
+                cancelText="No">
                 <Button danger icon={<DeleteOutlined />} className={styles.action} />
               </Popconfirm>
             </Tooltip>
@@ -95,51 +59,46 @@ const Users = () => {
     },
   ];
 
-  const dataSource = [
-    {
-      _id: "string",
-      title: "This is a new blog",
-      tag: "Blockchain",
-      createdAt: "12:12 12/12/2022",
-      updatedAt: "12:12 12/12/2022",
-      status: "Pending",
-    },
-    {
-      _id: "string",
-      title: "This is a new blog",
-      tag: "Blockchain",
-      createdAt: "12:12 12/12/2022",
-      updatedAt: "12:12 12/12/2022",
-      status: "Approved",
-    },
-    {
-      _id: "string",
-      title: "This is a new blog",
-      tag: "Blockchain",
-      createdAt: "12:12 12/12/2022",
-      updatedAt: "12:12 12/12/2022",
-      status: "Publish",
-    },
-  ];
+  const onDelete = (id: string) => {
+    userApi
+      .delete(id)
+      .then(() => {
+        message.success("Xóa thành công!");
+        fetchUsers();
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Đã xảy ra lỗi!");
+      });
+  };
+
+  const fetchUsers = () => {
+    userApi.getAllUsers().then((res) => {
+      setUsers(res?.items);
+      setSource(res?.items);
+    });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const onSearch = (value: string) => {
+    const tmp = users.filter((user) => user.userName.toLowerCase().includes(value.toLowerCase()));
+    setSource(tmp);
+  };
+
   return (
     <div>
       <h1 className="text-blue-600 text-2xl">Users</h1>
       <Card>
         <Row gutter={[20, 20]}>
-          <Col span={20}>
-            <div className="flex flex-row gap-3">
-              <Search style={{ width: 300 }} placeholder="Search" enterButton />
-            </div>
+          <Col span={8}>
+            <Search onSearch={onSearch} size="large" style={{ width: "100%" }} placeholder="Search" enterButton />
           </Col>
-          <Col span={4}>
-            <Link to="/posts/publish">
-              <Button block type="primary" icon={<PlusCircleOutlined />}>
-                Post new blog
-              </Button>
-            </Link>
-          </Col>
+          <Col span={4}></Col>
           <Col span={24}>
-            <Table bordered columns={columns} dataSource={dataSource} />
+            <Table rowKey={(item) => item?.id} bordered columns={columns} dataSource={source} />
           </Col>
         </Row>
       </Card>
